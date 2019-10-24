@@ -1,6 +1,6 @@
 //I would like to create 2 columns of a table: the first displays the image of each penguin, the second displays the final score
 
-var appPromise = d3.json("/penguins/classData.json");
+var appPromise = d3.json("penguins/classData.json");
 appPromise.then(
     function(penguins)
         {
