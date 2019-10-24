@@ -5,27 +5,23 @@ appPromise.then(
     function(penguins)
         {
           makeTable(penguins); 
+          getGrade(penguins);
+          getQuizMean(penguins);
         }) 
 //brings my data in, and calls the function to draw the table.
 
+
+//This function draws my table
 var makeTable = function(penguins)
 {
-    //This function draws my table, and I hope redraws it with each new button click
     //d3.select("#mainTable").remove();
-  
-    var rows = d3.select("#mainTable")
+     var rows = d3.select("#mainTable")
     .selectAll("tr")
     .data(penguins)
     .enter()
     .append("tr");
-    //This was my attempt to create new table rows, but I'm not sure if there's data in them.
     
-    //addCol(rows,function(penguins)
-           //{
-          // return penguins.picture
-           //});
-    //This was my attempt to add a column of penguin images, but I don't know if I need the following block of code:
-     
+    //this adds a column of images of penguins 
     rows.append("td")
         .append("img")
         .attr("src",function(d)
@@ -34,27 +30,17 @@ var makeTable = function(penguins)
         //look at why "penguins" etc.
         });
 
-    rows.append("td").text(function(penguin)
-        {
-            return penguin.final[0].grade
-            //study syntax for lines 37/39
-        });
-    
-    //create new column of first quiz grade for each penguin
-    rows.append("td").text(function(penguin)
-        {
-        return penguin.quizes[0].grade
+    //These addCol functions are self-designed (not from the language), and take functions as inputs to basically automate the table generating process 
+    addCol(rows,function(penguin)
+    {
+        return penguin.final[0].grade;
     })
     
     addCol(rows,function(penguin)
     {
-        return penguin.quizes[0].grade
-    })
-    
-     addCol(rows,function(penguin)
-    {
-        return penguin.final[0].grade
-    })
+        return getQuizMean(penguins);
+    }) 
+     
 }
 //We want this addCol to be its own function and automate what we did from 37-47
 //When building function like this, try leaving the inside of "function()" blank and figure it out as we move forward
@@ -65,7 +51,31 @@ var addCol=function(rows, fcn)
     
     }
 
+//These functions calculate the means and other stuff used below as inputs
+ var getGrade = function(penguins)
+ {
+    return penguins.quizes.grade;
+ }
+
+var getQuizMean = function(penguin)
+    {
+        return d3.mean(penguin.quizes,getGrade);
+    }
+
+//use this function addCol we created because it tells me what's going on, feels more intuitive, helps me remember; also, if our initial function had a small mistake and I copy/paste it a million times I have all those mistakes, just like adding CSS to everything is easier here too. REMEMBER: function can be packed up and used as a parameter; 
+
 //To add text to next column, a function is needed.
     //Make functions when you realize you're doing too much work (maybe copy/paste a lot, etc.)
     //at its core, d3 is taking the data and creating something with html to match up
  
+  /* rows.append("td").text(function(penguin)
+        {
+            return penguin.final[0].grade
+            //study syntax for lines 37/39
+        });
+    
+    //create new column of first quiz grade for each penguin
+    rows.append("td").text(function(penguin)
+        {
+        return penguin.quizes[0].grade
+    })*/
